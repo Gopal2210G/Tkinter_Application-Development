@@ -1,4 +1,4 @@
-import tkinter as tk
+import customtkinter as ctk
 from tkinter import messagebox
 from tkinter import simpledialog
 import re
@@ -125,10 +125,10 @@ class AcademicUnit:
             pass
 class PersonTypeDialog(simpledialog.Dialog):
     def body(self, master):
-        tk.Label(master, text="Select your person type:").grid(row=0, sticky=tk.W)
-        self.person_type_var = tk.StringVar(value="Student")  # Default value
-        tk.Checkbutton(master, text="Student", variable=self.person_type_var, onvalue="Student", offvalue="").grid(row=1)
-        tk.Checkbutton(master, text="Teacher", variable=self.person_type_var, onvalue="Teacher", offvalue="").grid(row=2)
+        ctk.CTkLabel(master, text="What's your role:", text_color="black").grid(row=0, sticky=ctk.W)
+        self.person_type_var = ctk.StringVar(value="Student")  # Default value
+        ctk.CTkCheckBox(master, text="Student", variable=self.person_type_var, onvalue="Student", offvalue="", text_color="black").grid(row=1)
+        ctk.CTkCheckBox(master, text="Teacher", variable=self.person_type_var, onvalue="Teacher", offvalue="", text_color="black").grid(row=2)
 
     def apply(self):
         self.result = self.person_type_var.get()
@@ -147,40 +147,43 @@ class App:
         self.create_widgets()
 
     def create_widgets(self):
-        self.frame = tk.Frame(self.root)
+        self.frame = ctk.CTkFrame(self.root)
         font_tuple = ('Helvetica', 12, 'bold')
         self.frame.pack(expand=True, fill='both', padx=20, pady=20)
 
-        tk.Label(self.frame, text="User ID",font=font_tuple).grid(row=0, column=0, padx=10, pady=10)
-        tk.Label(self.frame, text="Password",font=font_tuple).grid(row=1, column=0, padx=10, pady=10)
+        ctk.CTkLabel(self.frame, text="User ID",font=font_tuple).grid(row=0, column=0, padx=10, pady=10)
+        ctk.CTkLabel(self.frame, text="Password",font=font_tuple).grid(row=1, column=0, padx=10, pady=10)
 
-        self.user_id_entry = tk.Entry(self.frame,width=30,borderwidth=3)
-        self.password_entry = tk.Entry(self.frame, show='*',width=30,borderwidth=3)
+        self.user_id_entry = ctk.CTkEntry(self.frame,width=150)
+        self.password_entry = ctk.CTkEntry(self.frame,width=150, show="*")
         self.user_id_entry.grid(row=0, column=1, padx=10, pady=10)
         self.password_entry.grid(row=1, column=1, padx=10, pady=10)
-        self.show_password_var = tk.BooleanVar(value=False)
-        tk.Checkbutton(self.frame, text="Show Password", variable=self.show_password_var, command=self.toggle_show_password).grid(row=1, column=2, columnspan=2, pady=10,sticky='E')
-        # New "Show Password" button
+        self.show_password_var = ctk.BooleanVar(value=False)
+        ctk.CTkCheckBox(self.frame, text="Show Password", fg_color="#80669d", hover_color="#9a86b1", variable=self.show_password_var, command=self.toggle_show_password).grid(row=1, column=2, columnspan=2, pady=10,sticky='E')
+        # New "Show Password" CTkButton
 
-        self.register_btn = tk.Button(self.frame, text="Register", command=self.register_user, bg="#80669d", fg="Black",font=('Helvetica', 12))
-        self.sign_in_btn = tk.Button(self.frame, text="Sign In", command=self.sign_in, bg="#80669d", fg="Black",font=('Helvetica', 12))
+        self.register_btn = ctk.CTkButton(self.frame, text="Register", command=self.register_user, fg_color="#80669d", hover_color="#9a86b1",font=('Helvetica', 12))
+        self.sign_in_btn = ctk.CTkButton(self.frame, text="Sign In", command=self.sign_in, fg_color="#80669d", hover_color="#9a86b1", font=('Helvetica', 12))
 
         self.register_btn.grid(row=2, column=0, columnspan=2, pady=10)
         self.sign_in_btn.grid(row=3, column=0, columnspan=2, pady=10)
 
-        self.update_btn = tk.Button(self.frame, text="Update Profile", command=self.update_profile, state=tk.DISABLED, bg="#80669d", fg="Black",font=('Helvetica', 12))
+        self.update_btn = ctk.CTkButton(self.frame, text="Update Profile", command=self.update_profile, state=ctk.DISABLED, fg_color="#80669d",  hover_color="#9a86b1",font=('Helvetica', 12))
         self.update_btn.grid(row=4, column=0, columnspan=2, pady=10)
-        self.deregister_btn = tk.Button(self.frame, text="Deregister", command=self.deregister_user, state=tk.DISABLED, bg="#80669d", fg="Black",font=('Helvetica', 12))
+        self.deregister_btn = ctk.CTkButton(self.frame, text="Deregister", command=self.deregister_user, state=ctk.DISABLED, fg_color="#80669d", hover_color="#9a86b1",font=('Helvetica', 12))
         self.deregister_btn.grid(row=5, column=0, columnspan=2, pady=10)
 
-        self.print_btn = tk.Button(self.frame, text="Print Data", command=self.print_user_data, state=tk.DISABLED, bg="#80669d", fg="Black",font=('Helvetica', 12))
+        self.print_btn = ctk.CTkButton(self.frame, text="Print Data", command=self.print_user_data, state=ctk.DISABLED, fg_color="#80669d", hover_color="#9a86b1",font=('Helvetica', 12))
         self.print_btn.grid(row=8, column=0, columnspan=2, pady=10)
         
             
     def toggle_show_password(self):
-        # Toggle the password visibility based on the state of the "Show Password" button
+        # Toggle the password visibility based on the state of the "Show Password" CTkButton
         show_password = self.show_password_var.get()
-        self.password_entry["show"] = "" if show_password else "*"
+        if show_password:
+            self.password_entry.configure(show="")
+        else:
+            self.password_entry.configure(show="*")
 
     def register_user(self):
         user_id = self.user_id_entry.get()
@@ -216,8 +219,8 @@ class App:
                         self.academic_unit.users[-1].student_type = student_type
 
                     messagebox.showinfo("Registration", "User registered successfully.")
-                    # Clear the password entry after successful registration
-                    self.password_entry.delete(0, tk.END)
+                    # Clear the password CTkEntry after successful registration
+                    self.password_entry.delete(0, ctk.END)
             else:messagebox.showerror("Error", "Person type is required.")
         else:
             messagebox.showerror("Error", "Invalid email or password. Please enter valid values.")
@@ -234,9 +237,9 @@ class App:
             messagebox.showerror("Error", "Authentication failed. Check your credentials.")
 
     def enable_profile_buttons(self):
-        self.update_btn["state"] = tk.NORMAL
-        self.print_btn["state"] = tk.NORMAL
-        self.deregister_btn["state"] = tk.NORMAL
+        self.update_btn["state"] = ctk.NORMAL
+        self.print_btn["state"] = ctk.NORMAL
+        self.deregister_btn["state"] = ctk.NORMAL
         self.register_btn["text"] = "New Registration"
         self.register_btn["command"] = self.new_registration
 
@@ -271,9 +274,9 @@ class App:
             messagebox.showerror("Error", "Please sign in first.")
 
     def disable_profile_buttons(self):
-        self.update_btn["state"] = tk.DISABLED
-        self.deregister_btn["state"] = tk.DISABLED
-        self.print_btn["state"] = tk.DISABLED
+        self.update_btn["state"] = ctk.DISABLED
+        self.deregister_btn["state"] = ctk.DISABLED
+        self.print_btn["state"] = ctk.DISABLED
 
     def is_valid_password(self, password):
         if 8 <= len(password) <= 12 and any(c.isupper() for c in password) \
@@ -289,11 +292,11 @@ class App:
     def print_user_data(self):
         if self.current_user_id:
             # Create a new window for displaying user data
-            top_window = tk.Toplevel(self.root)
+            top_window = ctk.Toplevel(self.root)
             top_window.geometry("250x250")
-            titlebar_frame = tk.Frame(top_window, bg="lightblue", height=30)
-            titlebar_frame.pack(fill=tk.X)
-            title_label = tk.Label(titlebar_frame, text="User Data", fg="purple", font=("Arial", 12, "bold"))
+            titlebar_frame = ctk.CTkFrame(top_window, fg_color="lightblue", height=30)
+            titlebar_frame.pack(fill=ctk.X)
+            title_label = ctk.CTkLabel(titlebar_frame, text="User Data", bg_color="purple", font=("Arial", 12, "bold"))
             title_label.pack(pady=5)
             top_window.title("User Data")
 
@@ -303,15 +306,15 @@ class App:
 
             if current_user:
                 # Display user data in the new window
-                tk.Label(top_window, text="User ID: " + current_user.user_id).pack()
-                tk.Label(top_window, text="Name: " + current_user.name).pack()
-                tk.Label(top_window, text="Email: " + current_user.email).pack()
+                ctk.CTkLabel(top_window, text="User ID: " + current_user.user_id).pack()
+                ctk.CTkLabel(top_window, text="Name: " + current_user.name).pack()
+                ctk.CTkLabel(top_window, text="Email: " + current_user.email).pack()
 
                 if hasattr(current_user, 'subject') and current_user.subject is not None:
-                    tk.Label(top_window, text="Subject: " + current_user.subject).pack()
+                    ctk.CTkLabel(top_window, text="Subject: " + current_user.subject).pack()
                     # Check if student_type attribute is not None before concatenating
                 if hasattr(current_user, 'student_type') and current_user.student_type is not None:
-                    tk.Label(top_window, text="Student Type: " + current_user.student_type).pack()
+                    ctk.CTkLabel(top_window, text="Student Type: " + current_user.student_type).pack()
                 # Additional details for teachers and students
             else:
                 messagebox.showerror("Error", "User not found.")
@@ -320,7 +323,7 @@ class App:
 
 
 if __name__ == "__main__":
-    root = tk.Tk()
+    root = ctk.CTk()
     app = App(root)
     root.mainloop()
 

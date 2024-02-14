@@ -1,1 +1,4 @@
 Student,afbkjb@jbk.eg,gstgDF#3,dghxt ,dbgsie,None
+Teacher,ahoj.ahoj@gmail.com,@Gasd@65,Gasd,gasdd,None
+Student,gasd@gmail.com,@Gasd@65,Gasd,vdsv,None
+Student,Gasd@gmail.com,@Gasd@65,Gasd,fsfd,None
